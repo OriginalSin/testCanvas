@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>png-transform-stream</title>
+	<style>
+body, .app {
+	overflow: hidden;
+}
+.all {
+	display: flex;
+}
+.images {
+    width: fit-content;
+}
+.text {
+    padding: 4px;
+}
+.contentCanvas,
+.contentImg {
+	background-color: aqua;
+    border: 4px solid black;
+    width: fit-content;
+}
+.contentImg {
+	background-color: aquamarine;
+}
+.images .contentCanvas {
+    border-color: black;
+}
+.images.active .contentCanvas {
+    border-color: red;
+}
+.images .contentImg {
+    border-color: red;
+}
+.images.active .contentImg {
+    border-color: black;
+}
+.images .image {
+    cursor: alias;
+}
+.images.active .image {
+    cursor: default;
+}
+.images.active .canvas {
+    cursor: alias;
+}
+.image,
+.canvas {
+    width: 256px;
+    height: 256px;
+	display: block;
+	opacity: 1;
+	position: relative;
+}
+.text {
+	height: 520px;
+}
+	</style>
+  </head>
+  <body>
+	<div class="all">
+		<div class="images">
+			<div class="contentCanvas">
+				<canvas class="canvas" />
+			</div>
+			<div class="contentImg">
+				<canvas class="image" />
+			</div>
+		</div>
+		<div class="textCont">
+			<textarea class="text"></textarea>
+		</div>
+	</div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
