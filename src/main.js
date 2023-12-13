@@ -59,6 +59,7 @@ const drawImg = () => {		// перерисовка
 		ctx.fillText(i, p[0] - 6, p[1] + 6);
 	});
 	textNode.innerHTML = JSON.stringify(pos, null, 2);
+	if (pos.d.length !== pos.s.length) return; // ожидаем пока нет пары у любой из точек
 	if (imageData) transf();
 };
 
@@ -94,37 +95,31 @@ const transf = () => {	// проходим по всем пикселам
 const norm = (p,q) => {
 	let [x1,y1] = p;
 	let [x2,y2] = q;
-	return [((x1-x2)^2+(y1-y2)^2) / (1+(x1-x2)^2+(y1-y2)^2)];
+	let xy12 = Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2);
+	return 1 / (1/xy12 + 1);
+	// return xy12 / (1 + xy12);
+	// return [((x1-x2)^2+(y1-y2)^2) / (1+(x1-x2)^2+(y1-y2)^2)];
 }
 
 const project = (p, data) => {	// перепроектирование
-	let [x, y] = p; let [smx, smy, sm] = [0, 0, 0]; let n = data.s.length;
+	let [x, y] = p;	let [smx, smy, sm] = [0, 0, 0];
+	// let n = data.s.length;
 	// xnew = sum(d[i]*product(norm(p,s[(i+j) % n])/norm(s[i],s[(i+j)%n]),j=0..(n-1)),i=0..(n-1))
 	data.s.forEach((si, i) => {
-		//let [six, siy] = si;
-		if (data.d[i]) {
-			let [dix, diy] = data.d[i];
-			//if (sx > dx) { // при x входной точки > x выходной точки - берем 0 точку для всех
-			//	x = 0;
-			//	y = 0;
-			//smx = smx + dx *
-			// console.log('dix, diy', six, siy, px, py, dix, diy);
-			//}
-			let pr = 1;
-			data.s.forEach((sj, j) => {
-				if (j !== i) {
-					//let [sjx, sjy] = sj;
-					let nm = norm(p, sj) / norm(si, sj);
-					pr = pr * nm;
-				}
-			});
-			smx = smx + dix * pr;
-			smy = smy + diy * pr;
-			sm = sm + pr;
-	// console.log('dx, dy', sx, sy, dx, dy)
-			smx = Math.min(256, Math.max(0, smx / sm));
-			smy = Math.min(256, Math.max(0, smy / sm));
-		}
+		let [dix, diy] = data.d[i];
+		let pr = 1;
+		data.s.forEach((sj, j) => {
+			if (j !== i) {
+				let nm = norm(p, sj) / norm(si, sj);
+				pr = pr * nm;
+			}
+		});
+		smx = smx + dix * pr;
+		smy = smy + diy * pr;
+		sm = sm + pr;
+// console.log('dx, dy', sx, sy, dx, dy)
+		smx = Math.min(256, Math.max(0, smx / sm));
+		smy = Math.min(256, Math.max(0, smy / sm));
 	});
 	return [Math.ceil(smx), Math.ceil(smy)];
 }
