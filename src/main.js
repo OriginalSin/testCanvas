@@ -91,20 +91,40 @@ const transf = () => {	// проходим по всем пикселам
 	ptx.putImageData(out, 0, 0);
 }
 
+const norm = (p,q) => {
+	let [x1,y1] = p;
+	let [x2,y2] = q;
+	return [((x1-x2)^2+(y1-y2)^2) / (1+(x1-x2)^2+(y1-y2)^2)];
+}
+
 const project = (p, data) => {	// перепроектирование
-	let [x, y] = p;
-	data.s.forEach((s, i) => {
-		let [sx, sy] = s;
+	let [x, y] = p; let [smx, smy, sm] = [0, 0, 0]; let n = data.s.length;
+	// xnew = sum(d[i]*product(norm(p,s[(i+j) % n])/norm(s[i],s[(i+j)%n]),j=0..(n-1)),i=0..(n-1))
+	data.s.forEach((si, i) => {
+		//let [six, siy] = si;
 		if (data.d[i]) {
-			let [dx, dy] = data.d[i];
-			if (sx > dx) { // при x входной точки > x выходной точки - берем 0 точку для всех
-				x = 0;
-				y = 0;
+			let [dix, diy] = data.d[i];
+			//if (sx > dx) { // при x входной точки > x выходной точки - берем 0 точку для всех
+			//	x = 0;
+			//	y = 0;
+			//smx = smx + dx *
+			console.log('dix, diy', six, siy, px, py, dix, diy);
+			//}
+		let pr = 1;
+		data.s.forEach((sj, j) => {
+			if (j <> i) then {
+				//let [sjx, sjy] = sj;
+				let nm = norm(p, sj) / norm(si, sj);
+				pr = pr * nm;
 			}
+		}
+		smx = smx + dix * pr;
+		smy = smy + diy * pr;
+		sm = sm + pr;
 	// console.log('dx, dy', sx, sy, dx, dy)
 		}
-
+	smx = min(256, max(0, smx / sm)); smy = min(256, max(0, smy / sm));
 	});
-	return [x, y];
+	return [int(smx), int(smy)];
 }
 
