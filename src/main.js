@@ -96,8 +96,8 @@ const norm = (p,q) => {
 	let [x1,y1] = p;
 	let [x2,y2] = q;
 	let xy12 = Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2);
-	return 1 / (1/xy12 + 1);
-	// return xy12 / (1 + xy12);
+	// return 1 / (1/xy12 + 1);
+	return xy12 / (1 + xy12);
 	// return [((x1-x2)^2+(y1-y2)^2) / (1+(x1-x2)^2+(y1-y2)^2)];
 }
 
