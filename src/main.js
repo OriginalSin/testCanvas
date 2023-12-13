@@ -108,23 +108,24 @@ const project = (p, data) => {	// перепроектирование
 			//	x = 0;
 			//	y = 0;
 			//smx = smx + dx *
-			console.log('dix, diy', six, siy, px, py, dix, diy);
+			// console.log('dix, diy', six, siy, px, py, dix, diy);
 			//}
-		let pr = 1;
-		data.s.forEach((sj, j) => {
-			if (j <> i) then {
-				//let [sjx, sjy] = sj;
-				let nm = norm(p, sj) / norm(si, sj);
-				pr = pr * nm;
-			}
-		}
-		smx = smx + dix * pr;
-		smy = smy + diy * pr;
-		sm = sm + pr;
+			let pr = 1;
+			data.s.forEach((sj, j) => {
+				if (j !== i) {
+					//let [sjx, sjy] = sj;
+					let nm = norm(p, sj) / norm(si, sj);
+					pr = pr * nm;
+				}
+			});
+			smx = smx + dix * pr;
+			smy = smy + diy * pr;
+			sm = sm + pr;
 	// console.log('dx, dy', sx, sy, dx, dy)
+			smx = Math.min(256, Math.max(0, smx / sm));
+			smy = Math.min(256, Math.max(0, smy / sm));
 		}
-	smx = min(256, max(0, smx / sm)); smy = min(256, max(0, smy / sm));
 	});
-	return [int(smx), int(smy)];
+	return [Math.ceil(smx), Math.ceil(smy)];
 }
 
